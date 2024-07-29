@@ -1,9 +1,25 @@
-const gql = require('graphql-tag');
+const gql = require("graphql-tag");
 
 const typeDefs = gql`
   type Query {
     "Query to get tracks array for the homepage grid"
     tracksForHome: [Track!]!
+    track(id: ID!): Track
+  }
+
+  type Mutation {
+    incrementTrackViews(id: ID!): IncrementTrackViewsResponse!
+  }
+
+  type IncrementTrackViewsResponse {
+    "Similar to HTTP status code, represents the status of the mutation"
+    code: Int!
+    "Indicated whether the mutation was successful"
+    success: Boolean!
+    "Human readible message for the UI"
+    message: String!
+    "Newly updated track after a successful mutation"
+    track: Track
   }
 
   "A track is a group of Modules that teaches about a specific topic"
@@ -19,6 +35,20 @@ const typeDefs = gql`
     length: Int
     "The number of modules this track contains"
     modulesCount: Int
+    "The track's complete description, can be in Markdown format"
+    description: String
+    "The number of times a track has been viewed"
+    numberOfViews: Int
+    "The track's complete array of Modules"
+    modules: [Module]!
+  }
+
+  type Module {
+    id: ID!
+    "The Module's title"
+    title: String!
+    "The Module's length in minutes"
+    length: Int
   }
 
   "Author of a complete Track or a Module"
